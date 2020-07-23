@@ -6,6 +6,7 @@ from server.models.part_info import PartInfo  # noqa: E501
 from server.models.database import Database
 from server import util
 
+database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='WorkOrder', charset='utf8mb4')
 
 def add_ln(body):  # noqa: E501
     """Add a new lot number to a part number
@@ -45,6 +46,7 @@ def get_inv():  # noqa: E501
 
     :rtype: None
     """
+    database_object.open_connection()
     return 'do some magic!'
 
 
