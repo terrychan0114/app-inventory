@@ -120,17 +120,17 @@ paths:
       x-openapi-router-controller: server.controllers.inventory_controller
 components:
   schemas:
-    part_number_body:
+    part_info:
       required:
-      - partNumber
+      - part_number
       type: object
       properties:
-        partNumber:
+        part_number:
           type: string
           example: "18300"
-        lot_info:
-          $ref: '#/components/schemas/lot_number_body'
-    lot_number_body:
+        lot_info_mega:
+          $ref: '#/components/schemas/lot_info'
+    lot_info:
       type: object
       properties:
         lot_number:
@@ -139,9 +139,6 @@ components:
         part_number:
           type: string
           example: STD-634
-        description:
-          type: string
-          example: This is a washer
         quantity:
           type: integer
           example: 2000
@@ -151,13 +148,13 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/part_number_body'
+            $ref: '#/components/schemas/part_info'
       required: true
     lotNumber:
       description: Pet object that needs to be added to the store
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/lot_number_body'
+            $ref: '#/components/schemas/lot_info'
       required: true
 
