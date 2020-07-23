@@ -3,13 +3,13 @@
 ## Overview
 This server is to track and update inventory. 
 
-[GET] /inventory
-[GET] /inventory/part_number
-[POST] /inventory/part_number
-[PUT] /inventory/part_number
-[GET] /inventory/lot_number
-[POST] /inventory/lot_number
-[PUT] /inventory/lot_number
+* [GET] /inventory
+* [GET] /inventory/part_number
+* [POST] /inventory/part_number
+* [PUT] /inventory/part_number
+* [GET] /inventory/lot_number
+* [POST] /inventory/lot_number
+* [PUT] /inventory/lot_number
 
 
 ## Requirements
@@ -24,7 +24,7 @@ To run the server on a Docker container, please execute the following from the r
 docker build -t app-inventory .
 
 # starting up a container
-docker run -p 8081:8081 app-inventory
+docker run -p 8081:8080 app-inventory
 ```
 
 ## Starting database
@@ -37,5 +37,5 @@ Before regenerating the microservice, make sure you include the file that you **
 
 To regenerate the microservice, you can run the following code:
 ```
-java -jar ./swagger-codegen-cli.jar generate -i ./app-inventory/api/v1.0.0.yaml -l python-flask -c ./app-inventory/api/config.json -o ./app-inventory
+java -jar ./swagger-codegen-cli.jar generate -Dmodels -Dapis -i ./app-inventory/api/v1.0.0.yaml -l python-flask -c ./app-inventory/api/config.json -o ./app-inventory
 ```

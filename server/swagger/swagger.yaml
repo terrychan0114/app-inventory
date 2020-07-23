@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: Inventory Microservice
+  description: |
+    This is the inventory microservice.
+  contact:
+    email: terry.chan@hohokusinc.com
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: inventory
+  description: Everything about inventory
+paths:
+  /inventory:
+    get:
+      tags:
+      - inventory
+      summary: Get the information of all inventory
+      operationId: get_inv
+      responses:
+        "200":
+          description: Ok
+        "404":
+          description: Item not found
+      x-openapi-router-controller: server.controllers.inventory_controller
+  /inventory/part_number:
+    get:
+      tags:
+      - inventory
+      summary: Get the information of a part number
+      operationId: get_pn
+      parameters:
+      - name: part_number
+        in: query
+        description: This is the input
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+        "404":
+          description: Item not found
+      x-openapi-router-controller: server.controllers.inventory_controller
+    put:
+      tags:
+      - inventory
+      summary: Update a part number
+      operationId: update_pn
+      requestBody:
+        $ref: '#/components/requestBodies/partNumber'
+      responses:
+        "200":
+          description: Ok
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: server.controllers.inventory_controller
+    post:
+      tags:
+      - inventory
+      summary: Add a new work order to the server
+      operationId: add_pn
+      requestBody:
+        $ref: '#/components/requestBodies/partNumber'
+      responses:
+        "200":
+          description: Ok
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: server.controllers.inventory_controller
+  /inventory/lot_number:
+    get:
+      tags:
+      - inventory
+      summary: Get the information of a lot number
+      operationId: get_ln
+      parameters:
+      - name: lot_number
+        in: query
+        description: This is the input for getting lot number
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+        "404":
+          description: Item not found
+      x-openapi-router-controller: server.controllers.inventory_controller
+    put:
+      tags:
+      - inventory
+      summary: Update an item
+      operationId: update_ln
+      requestBody:
+        $ref: '#/components/requestBodies/lotNumber'
+      responses:
+        "200":
+          description: Ok
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: server.controllers.inventory_controller
+    post:
+      tags:
+      - inventory
+      summary: Add a new lot number to a part number
+      operationId: add_ln
+      requestBody:
+        $ref: '#/components/requestBodies/lotNumber'
+      responses:
+        "200":
+          description: Ok
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: server.controllers.inventory_controller
+components:
+  schemas:
+    part_number_body:
+      required:
+      - partNumber
+      type: object
+      properties:
+        partNumber:
+          type: string
+          example: "18300"
+        lot_info:
+          $ref: '#/components/schemas/lot_number_body'
+    lot_number_body:
+      type: object
+      properties:
+        lot_number:
+          type: string
+          example: R1000
+        part_number:
+          type: string
+          example: STD-634
+        description:
+          type: string
+          example: This is a washer
+        quantity:
+          type: integer
+          example: 2000
+  requestBodies:
+    partNumber:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/part_number_body'
+      required: true
+    lotNumber:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/lot_number_body'
+      required: true
+
