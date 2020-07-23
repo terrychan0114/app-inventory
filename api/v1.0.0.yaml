@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  description: |
+    This is the inventory microservice.
+  version: "1.0.0"
+  title: Inventory Microservice
+  contact:
+    email: terry.chan@hohokusinc.com
+    
+tags:
+  - name: inventory
+    description: Everything about inventory
+
+paths:
+  /inventory:
+    get:
+      tags:
+        - inventory
+      summary: Get the information of all inventory
+      operationId: getINV
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Item not found
+          
+  /inventory/part_number:
+    post:
+      tags:
+        - inventory
+      summary: Add a new work order to the server
+      operationId: addPN
+      responses:
+        '200':
+          description: Ok
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/partNumber'
+    
+    get:
+      tags:
+        - inventory
+      summary: Get the information of a part number
+      operationId: getPN
+      parameters:
+        - name: part_number
+          in: query
+          required: true
+          description: This is the input
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Item not found
+          
+    put:
+      tags:
+        - inventory
+      summary: Update a part number
+      operationId: updatePN
+      responses:
+        '200':
+          description: Ok
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/partNumber'
+        
+  /inventory/lot_number:
+    post:
+      tags:
+        - inventory
+      summary: Add a new lot number to a part number
+      operationId: addLN
+      responses:
+        '200':
+          description: Ok
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/lotNumber'
+    
+    get:
+      tags:
+        - inventory
+      summary: Get the information of a lot number
+      operationId: getLN
+      parameters:
+        - name: lot_number
+          in: query
+          required: true
+          description: This is the input for getting lot number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Item not found
+          
+    put:
+      tags:
+        - inventory
+      summary: Update an item
+      operationId: updateLN
+      responses:
+        '200':
+          description: Ok
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/lotNumber'
+        
+components:
+  schemas:
+    part_number_body:
+      type: object
+      required:
+        - workOrderID
+        - status
+      properties:
+        partNumber:
+          type: string
+          example: 18300
+        lot_info:
+          $ref: '#/components/schemas/lot_number_body'
+
+    lot_number_body:
+      type: object
+      properties:
+        lot_number:
+          type: string
+          example: R1000
+        part_number:
+          type: string
+          example: STD-634
+        description:
+          type: string
+          example: This is a washer
+        quantity:
+          type: integer
+          example: 2000
+
+
+  requestBodies:
+    partNumber:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/part_number_body'
+      description: Pet object that needs to be added to the store
+      required: true
+    
+    lotNumber:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/lot_number_body'
+      description: Pet object that needs to be added to the store
+      required: true
