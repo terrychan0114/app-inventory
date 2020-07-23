@@ -3,6 +3,7 @@ import six
 
 from server.models.lot_info import LotInfo  # noqa: E501
 from server.models.part_info import PartInfo  # noqa: E501
+from server.models.database import Database
 from server import util
 
 
