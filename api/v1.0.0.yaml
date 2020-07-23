@@ -24,7 +24,7 @@ paths:
         '404':
           description: Item not found
           
-  /inventory/part_number:
+  /inventory/part-number:
     post:
       tags:
         - inventory
@@ -69,7 +69,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/partNumber'
         
-  /inventory/lot_number:
+  /inventory/lot-number:
     post:
       tags:
         - inventory

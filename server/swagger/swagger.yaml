@@ -24,7 +24,7 @@ paths:
         "404":
           description: Item not found
       x-openapi-router-controller: server.controllers.inventory_controller
-  /inventory/part_number:
+  /inventory/part-number:
     get:
       tags:
       - inventory
@@ -71,7 +71,7 @@ paths:
         "405":
           description: Invalid input
       x-openapi-router-controller: server.controllers.inventory_controller
-  /inventory/lot_number:
+  /inventory/lot-number:
     get:
       tags:
       - inventory
