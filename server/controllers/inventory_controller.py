@@ -1,9 +1,12 @@
 import connexion
+from loguru import logger
 import six
 
 from server.models.inventory_info import InventoryInfo  # noqa: E501
 from server import util
+from server.models.database import Database  # noqa: E501
 
+database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='WorkOrder', charset='utf8mb4')
 
 def add_pn(body):  # noqa: E501
     """Add a new work order to the server
@@ -17,7 +20,30 @@ def add_pn(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = InventoryInfo.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    lot_number = body.lot_number
+    quantity = body.quantity
+    part_number = body.part_number
+
+    database_object.open_connection()
+    sql_query = "INSERT INTO Paterson_Inventory (part_number,quantity,lot_number) VALUES (%s,%s,%s)"
+    input = (part_number,quantity,lot_number)
+    logger.debug(input)
+    try:
+        database_object.update_data(sql_query,input)
+    except:
+        logger.error("Unable to update")
+        raise
+
+    sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
+    input = lot_number
+    logger.debug(input)
+    try:
+        database_object.fetch_data(sql_query,input)
+        logger.info("Successful extraction")
+    except:
+        logger.error("Data return is empty")
+        raise
+    return 200
 
 
 def get_inv():  # noqa: E501
@@ -28,8 +54,21 @@ def get_inv():  # noqa: E501
 
     :rtype: List[InventoryInfo]
     """
-    return 'do some magic!'
-
+    database_object.open_connection()
+    sql_query = "SELECT * FROM Paterson_Inventory"
+    input = ""
+    try:
+        data = database_object.fetch_data(sql_query,input)
+        logger.info("Successful extraction")
+    except:
+        logger.error("Data return is empty")
+        raise
+    if data=={}:
+        logger.error("Part number does not exist")
+    else:
+        logger.debug(data)
+    database_object.close_connection()
+    return data
 
 def get_ln(lot_number):  # noqa: E501
     """Get the information of a lot number
@@ -41,7 +80,21 @@ def get_ln(lot_number):  # noqa: E501
 
     :rtype: InventoryInfo
     """
-    return 'do some magic!'
+    database_object.open_connection()
+    sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
+    input = lot_number
+    try:
+        data = database_object.fetch_data(sql_query,input)
+        logger.info("Successful extraction")
+    except:
+        logger.error("Data return is empty")
+        raise
+    if data=={}:
+        logger.error("Part number does not exist")
+    else:
+        logger.debug(data)
+    database_object.close_connection()
+    return data
 
 
 def get_pn(part_number):  # noqa: E501
@@ -54,7 +107,22 @@ def get_pn(part_number):  # noqa: E501
 
     :rtype: List[InventoryInfo]
     """
-    return 'do some magic!'
+    database_object.open_connection()
+    sql_query = "SELECT * FROM Paterson_Inventory WHERE part_number=%s"
+    input = part_number
+    logger.debug(input)
+    try:
+        data = database_object.fetch_data(sql_query,input)
+        logger.info("Successful extraction")
+    except:
+        logger.error("Data return is empty")
+        raise
+    if data=={}:
+        logger.error("Part number does not exist")
+    else:
+        logger.debug(data)
+    database_object.close_connection()
+    return data
 
 
 def update_pn(body):  # noqa: E501
@@ -69,4 +137,34 @@ def update_pn(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = InventoryInfo.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    lot_number = body.lot_number
+    quantity = body.quantity
+
+    database_object.open_connection()
+    sql_query = "UPDATE Paterson_Inventory SET quantity=%s WHERE lot_number=%s"
+    input = (quantity,lot_number)
+    logger.debug(type(input))
+    logger.debug(input)
+    try:
+        database_object.update_data(sql_query,input)
+    except:
+        logger.error("Unable to update")
+        raise
+
+    sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
+    input = lot_number
+    logger.debug(input)
+    try:
+        data = database_object.fetch_data(sql_query,input)
+        logger.info("Successful extraction")
+    except:
+        logger.error("Data return is empty")
+        raise
+
+    if data[lot_number]["quantity"]==quantity:
+        logger.info("Update successful")
+    else:
+        logger.error("Unsuccessful update")
+        return 500
+    database_object.close_connection()
+    return 200

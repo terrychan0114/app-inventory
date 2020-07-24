@@ -24,7 +24,16 @@ class Database:
             logger.error(e)
         else:
             logger.info("Successful connection")
-    import pymysql.cursors
+
+    def close_connection(self):
+        try:
+            if self.connection is not None:
+               self.connection.close()
+               self.connection = None
+        except pymysql.MySQLError as e:
+            logger.error(e)
+        else:
+            logger.info("Successful disconnection")
 
     def fetch_data(self, query,args):
         if self.connection is not None:
@@ -37,9 +46,18 @@ class Database:
                     db_result = cur.fetchall()
                     result = {}
                     for db_data in db_result:
-                        # logger.info(db_data['lot_number'])
                         result[db_data['lot_number']] = db_data
                     return result
             except TypeError:
                 logger.error("Unable to fetch data")
+                raise
+    
+    def update_data(self,query,args):
+        if self.connection is not None:
+            try:
+                with self.connection.cursor() as cur:
+                    cur.execute(query,args)
+                    self.connection.commit()
+            except TypeError:
+                logger.error("Unable to update data")
                 raise
