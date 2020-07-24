@@ -21,8 +21,41 @@ paths:
       responses:
         "200":
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inventoryInfo'
+                x-content-type: application/json
         "404":
           description: Item not found
+      x-openapi-router-controller: server.controllers.inventory_controller
+    put:
+      tags:
+      - inventory
+      summary: Update a part number
+      operationId: update_pn
+      requestBody:
+        $ref: '#/components/requestBodies/inventoryInfo'
+      responses:
+        "200":
+          description: Ok
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: server.controllers.inventory_controller
+    post:
+      tags:
+      - inventory
+      summary: Add a new work order to the server
+      operationId: add_pn
+      requestBody:
+        $ref: '#/components/requestBodies/inventoryInfo'
+      responses:
+        "200":
+          description: Ok
+        "405":
+          description: Invalid input
       x-openapi-router-controller: server.controllers.inventory_controller
   /inventory/part-number:
     get:
@@ -42,34 +75,15 @@ paths:
       responses:
         "200":
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inventoryInfo'
+                x-content-type: application/json
         "404":
           description: Item not found
-      x-openapi-router-controller: server.controllers.inventory_controller
-    put:
-      tags:
-      - inventory
-      summary: Update a part number
-      operationId: update_pn
-      requestBody:
-        $ref: '#/components/requestBodies/partNumber'
-      responses:
-        "200":
-          description: Ok
-        "405":
-          description: Invalid input
-      x-openapi-router-controller: server.controllers.inventory_controller
-    post:
-      tags:
-      - inventory
-      summary: Add a new work order to the server
-      operationId: add_pn
-      requestBody:
-        $ref: '#/components/requestBodies/partNumber'
-      responses:
-        "200":
-          description: Ok
-        "405":
-          description: Invalid input
       x-openapi-router-controller: server.controllers.inventory_controller
   /inventory/lot-number:
     get:
@@ -89,38 +103,16 @@ paths:
       responses:
         "200":
           description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inventoryInfo'
         "404":
           description: Item not found
       x-openapi-router-controller: server.controllers.inventory_controller
-    put:
-      tags:
-      - inventory
-      summary: Update an item
-      operationId: update_ln
-      requestBody:
-        $ref: '#/components/requestBodies/lotNumber'
-      responses:
-        "200":
-          description: Ok
-        "405":
-          description: Invalid input
-      x-openapi-router-controller: server.controllers.inventory_controller
-    post:
-      tags:
-      - inventory
-      summary: Add a new lot number to a part number
-      operationId: add_ln
-      requestBody:
-        $ref: '#/components/requestBodies/lotNumber'
-      responses:
-        "200":
-          description: Ok
-        "405":
-          description: Invalid input
-      x-openapi-router-controller: server.controllers.inventory_controller
 components:
   schemas:
-    part_info:
+    inventoryInfo:
       required:
       - part_number
       type: object
@@ -128,33 +120,26 @@ components:
         part_number:
           type: string
           example: "18300"
-        lot_info_mega:
-          $ref: '#/components/schemas/lot_info'
-    lot_info:
-      type: object
-      properties:
         lot_number:
           type: string
           example: R1000
-        part_number:
-          type: string
-          example: STD-634
         quantity:
           type: integer
           example: 2000
+        last_updated:
+          type: string
+          example: 7/16/2020 16:38
+      example:
+        last_updated: 7/16/2020 16:38
+        quantity: 2000
+        part_number: "18300"
+        lot_number: R1000
   requestBodies:
-    partNumber:
+    inventoryInfo:
       description: Pet object that needs to be added to the store
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/part_info'
-      required: true
-    lotNumber:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/lot_info'
+            $ref: '#/components/schemas/inventoryInfo'
       required: true
 

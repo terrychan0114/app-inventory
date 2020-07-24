@@ -4,13 +4,10 @@
 This server is to track and update inventory. 
 
 * [GET] /inventory
+* [POST] /inventory
+* [PUT] /inventory
 * [GET] /inventory/part_number
-* [POST] /inventory/part_number
-* [PUT] /inventory/part_number
 * [GET] /inventory/lot_number
-* [POST] /inventory/lot_number
-* [PUT] /inventory/lot_number
-
 
 ## Requirements
 Python 3.5.2+
@@ -37,5 +34,5 @@ Before regenerating the microservice, make sure you include the file that you **
 
 To regenerate the microservice, you can run the following code:
 ```
-java -jar ./swagger-codegen-cli.jar generate -Dmodels -Dapis -i ./app-inventory/api/v1.0.0.yaml -l python-flask -c ./app-inventory/api/config.json -o ./app-inventory
+java -jar ./swagger-codegen-cli.jar generate -i ./app-inventory/api/v1.0.0.yaml -l python-flask -c ./app-inventory/api/config.json -o ./app-inventory
 ```

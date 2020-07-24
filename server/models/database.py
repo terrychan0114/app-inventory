@@ -12,7 +12,6 @@ class Database:
         self.connection = None
 
     def open_connection(self):
-        
         try:
             if self.connection is None:
                self.connection = pymysql.connect(host=self.host,
@@ -23,6 +22,24 @@ class Database:
                              cursorclass=pymysql.cursors.DictCursor)
         except pymysql.MySQLError as e:
             logger.error(e)
-            raise
         else:
             logger.info("Successful connection")
+    import pymysql.cursors
+
+    def fetch_data(self, query,args):
+        if self.connection is not None:
+            try:
+                with self.connection.cursor() as cur:
+                    if args == "":
+                        cur.execute(query)
+                    else:
+                        cur.execute(query,args)
+                    db_result = cur.fetchall()
+                    result = {}
+                    for db_data in db_result:
+                        # logger.info(db_data['lot_number'])
+                        result[db_data['lot_number']] = db_data
+                    return result
+            except TypeError:
+                logger.error("Unable to fetch data")
+                raise
