@@ -14,7 +14,7 @@ class InventoryInfo(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, part_number: str=None, lot_number: str=None, quantity: int=None, last_updated: str=None):  # noqa: E501
+    def __init__(self, part_number: str=None, lot_number: str=None, quantity: int=None, last_updated: str=None, location: str=None, description: str=None, status: str=None, lead_time: str=None, outside_process: str=None, remarks: str=None):  # noqa: E501
         """InventoryInfo - a model defined in Swagger
 
         :param part_number: The part_number of this InventoryInfo.  # noqa: E501
@@ -25,24 +25,54 @@ class InventoryInfo(Model):
         :type quantity: int
         :param last_updated: The last_updated of this InventoryInfo.  # noqa: E501
         :type last_updated: str
+        :param location: The location of this InventoryInfo.  # noqa: E501
+        :type location: str
+        :param description: The description of this InventoryInfo.  # noqa: E501
+        :type description: str
+        :param status: The status of this InventoryInfo.  # noqa: E501
+        :type status: str
+        :param lead_time: The lead_time of this InventoryInfo.  # noqa: E501
+        :type lead_time: str
+        :param outside_process: The outside_process of this InventoryInfo.  # noqa: E501
+        :type outside_process: str
+        :param remarks: The remarks of this InventoryInfo.  # noqa: E501
+        :type remarks: str
         """
         self.swagger_types = {
             'part_number': str,
             'lot_number': str,
             'quantity': int,
-            'last_updated': str
+            'last_updated': str,
+            'location': str,
+            'description': str,
+            'status': str,
+            'lead_time': str,
+            'outside_process': str,
+            'remarks': str
         }
 
         self.attribute_map = {
             'part_number': 'part_number',
             'lot_number': 'lot_number',
             'quantity': 'quantity',
-            'last_updated': 'last_updated'
+            'last_updated': 'last_updated',
+            'location': 'location',
+            'description': 'description',
+            'status': 'status',
+            'lead_time': 'lead_time',
+            'outside_process': 'outside_process',
+            'remarks': 'remarks'
         }
         self._part_number = part_number
         self._lot_number = lot_number
         self._quantity = quantity
         self._last_updated = last_updated
+        self._location = location
+        self._description = description
+        self._status = status
+        self._lead_time = lead_time
+        self._outside_process = outside_process
+        self._remarks = remarks
 
     @classmethod
     def from_dict(cls, dikt) -> 'InventoryInfo':
@@ -140,3 +170,129 @@ class InventoryInfo(Model):
         """
 
         self._last_updated = last_updated
+
+    @property
+    def location(self) -> str:
+        """Gets the location of this InventoryInfo.
+
+
+        :return: The location of this InventoryInfo.
+        :rtype: str
+        """
+        return self._location
+
+    @location.setter
+    def location(self, location: str):
+        """Sets the location of this InventoryInfo.
+
+
+        :param location: The location of this InventoryInfo.
+        :type location: str
+        """
+
+        self._location = location
+
+    @property
+    def description(self) -> str:
+        """Gets the description of this InventoryInfo.
+
+
+        :return: The description of this InventoryInfo.
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description: str):
+        """Sets the description of this InventoryInfo.
+
+
+        :param description: The description of this InventoryInfo.
+        :type description: str
+        """
+
+        self._description = description
+
+    @property
+    def status(self) -> str:
+        """Gets the status of this InventoryInfo.
+
+
+        :return: The status of this InventoryInfo.
+        :rtype: str
+        """
+        return self._status
+
+    @status.setter
+    def status(self, status: str):
+        """Sets the status of this InventoryInfo.
+
+
+        :param status: The status of this InventoryInfo.
+        :type status: str
+        """
+
+        self._status = status
+
+    @property
+    def lead_time(self) -> str:
+        """Gets the lead_time of this InventoryInfo.
+
+
+        :return: The lead_time of this InventoryInfo.
+        :rtype: str
+        """
+        return self._lead_time
+
+    @lead_time.setter
+    def lead_time(self, lead_time: str):
+        """Sets the lead_time of this InventoryInfo.
+
+
+        :param lead_time: The lead_time of this InventoryInfo.
+        :type lead_time: str
+        """
+
+        self._lead_time = lead_time
+
+    @property
+    def outside_process(self) -> str:
+        """Gets the outside_process of this InventoryInfo.
+
+
+        :return: The outside_process of this InventoryInfo.
+        :rtype: str
+        """
+        return self._outside_process
+
+    @outside_process.setter
+    def outside_process(self, outside_process: str):
+        """Sets the outside_process of this InventoryInfo.
+
+
+        :param outside_process: The outside_process of this InventoryInfo.
+        :type outside_process: str
+        """
+
+        self._outside_process = outside_process
+
+    @property
+    def remarks(self) -> str:
+        """Gets the remarks of this InventoryInfo.
+
+
+        :return: The remarks of this InventoryInfo.
+        :rtype: str
+        """
+        return self._remarks
+
+    @remarks.setter
+    def remarks(self, remarks: str):
+        """Sets the remarks of this InventoryInfo.
+
+
+        :param remarks: The remarks of this InventoryInfo.
+        :type remarks: str
+        """
+
+        self._remarks = remarks

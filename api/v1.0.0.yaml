@@ -121,6 +121,24 @@ components:
         last_updated:
           type: string
           example: 7/16/2020 16:38
+        location:
+          type: string
+          example: 4A
+        description:
+          type: string
+          example: Screws
+        status:
+          type: string
+          example: Arrived here
+        lead_time:
+          type: string
+          example: 12 weeks
+        outside_process:
+          type: string
+          example: None
+        remarks:
+          type: string
+          example: Missing
 
   requestBodies:
     inventoryInfo:

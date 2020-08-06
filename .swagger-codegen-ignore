@@ -31,5 +31,5 @@ git_push.sh
 .travis.yml
 Dockerfile
 
-# server/controllers/*.py
+server/controllers/*.py
 # server/models/*.py

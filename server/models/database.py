@@ -44,9 +44,17 @@ class Database:
                     else:
                         cur.execute(query,args)
                     db_result = cur.fetchall()
-                    result = {}
+                    result = []
                     for db_data in db_result:
-                        result[db_data['lot_number']] = db_data
+                        date_added = db_data['date_added']
+                        string_date_time = date_added.strftime("%m/%d/%Y, %H:%M:%S")
+                        db_data['date_added'] = string_date_time
+
+                        last_updated = db_data['last_updated']
+                        string_last_updated = last_updated.strftime("%m/%d/%Y, %H:%M:%S")
+                        db_data['last_updated'] = string_last_updated
+
+                        result.append(db_data)
                     return result
             except TypeError:
                 logger.error("Unable to fetch data")

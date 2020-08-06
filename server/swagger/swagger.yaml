@@ -129,11 +129,35 @@ components:
         last_updated:
           type: string
           example: 7/16/2020 16:38
+        location:
+          type: string
+          example: 4A
+        description:
+          type: string
+          example: Screws
+        status:
+          type: string
+          example: Arrived here
+        lead_time:
+          type: string
+          example: 12 weeks
+        outside_process:
+          type: string
+          example: None
+        remarks:
+          type: string
+          example: Missing
       example:
         last_updated: 7/16/2020 16:38
         quantity: 2000
+        outside_process: None
+        lead_time: 12 weeks
         part_number: "18300"
+        description: Screws
+        location: 4A
         lot_number: R1000
+        remarks: Missing
+        status: Arrived here
   requestBodies:
     inventoryInfo:
       description: Pet object that needs to be added to the store
