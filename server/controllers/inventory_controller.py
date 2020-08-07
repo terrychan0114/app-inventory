@@ -38,7 +38,8 @@ def add_pn(body):  # noqa: E501
         database_object.update_data(sql_query,input)
     except:
         logger.error("Unable to add new inventory")
-        raise
+        database_object.close_connection()
+        return "", 405
 
     sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
     input = lot_number
@@ -48,8 +49,10 @@ def add_pn(body):  # noqa: E501
         logger.info("Successful extraction")
     except:
         logger.error("Data return is empty")
-        raise
-    return 200
+        database_object.close_connection()
+        return "", 404
+    database_object.close_connection()
+    return "", 200
 
 
 def get_inv():  # noqa: E501
@@ -67,14 +70,17 @@ def get_inv():  # noqa: E501
         data = database_object.fetch_data(sql_query,input)
         logger.info("Successful extraction")
     except:
-        logger.error("Data return is empty")
-        raise
-    if data=={}:
+        logger.error("Unable to fetch")
+        database_object.close_connection()
+        return "", 405
+    if data==[]:
         logger.error("Part number does not exist")
+        database_object.close_connection()
+        return "", 404
     else:
         logger.debug(data)
     database_object.close_connection()
-    return data
+    return data, 200
 
 def get_ln(lot_number):  # noqa: E501
     """Get the information of a lot number
@@ -93,14 +99,17 @@ def get_ln(lot_number):  # noqa: E501
         data = database_object.fetch_data(sql_query,input)
         logger.info("Successful extraction")
     except:
-        logger.error("Data return is empty")
-        raise
-    if data=={}:
+        logger.error("Unable to fetch")
+        database_object.close_connection()
+        return "", 405
+    if data==[]:
         logger.error("Part number does not exist")
+        database_object.close_connection()
+        return "", 404
     else:
         logger.debug(data)
     database_object.close_connection()
-    return data
+    return data, 200
 
 
 def get_pn(part_number):  # noqa: E501
@@ -121,14 +130,17 @@ def get_pn(part_number):  # noqa: E501
         data = database_object.fetch_data(sql_query,input)
         logger.info("Successful extraction")
     except:
-        logger.error("Data return is empty")
-        raise
-    if data=={}:
+        logger.error("Unable to fetch")
+        database_object.close_connection()
+        return "", 405
+    if data==[]:
         logger.error("Part number does not exist")
+        database_object.close_connection()
+        return "", 404
     else:
         logger.debug(data)
     database_object.close_connection()
-    return data
+    return data, 200
 
 
 def update_pn(body):  # noqa: E501
@@ -162,7 +174,8 @@ def update_pn(body):  # noqa: E501
         database_object.update_data(sql_query,input)
     except:
         logger.error("Unable to update")
-        raise
+        database_object.close_connection()
+        return "", 405
 
     sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
     input = lot_number
@@ -171,13 +184,15 @@ def update_pn(body):  # noqa: E501
         data = database_object.fetch_data(sql_query,input)
         logger.info("Successful extraction")
     except:
-        logger.error("Data return is empty")
-        raise
+        logger.error("Unable to fetch")
+        database_object.close_connection()
+        return "", 404
 
     if data[0]["quantity"]==quantity:
         logger.info("Update successful")
     else:
         logger.error("Unsuccessful update")
+        database_object.close_connection()
         return 500
     database_object.close_connection()
     return 200
