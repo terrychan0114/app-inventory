@@ -5,8 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                docker build -t hkserver/app-inventory:dev .
-
+                sh 'docker build -t hkserver/app-inventory:dev .'
             }
         }
         stage('Test') {
@@ -17,7 +16,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                docker push hkserver/app-inventory:dev
+                sh 'docker push hkserver/app-inventory:dev'
             }
         }
     }
