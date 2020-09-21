@@ -6,7 +6,13 @@ from server.models.inventory_info import InventoryInfo  # noqa: E501
 from server import util
 from server.models.database import Database  # noqa: E501
 
-database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='WorkOrder', charset='utf8mb4')
+test = False
+if test == True:
+    logger.info("You are in testing mode")
+    database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='TestDB', charset='utf8mb4')
+else:
+    logger.info("You are in production mode")
+    database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='WorkOrder', charset='utf8mb4')
 
 def add_pn(body):  # noqa: E501
     """Add a new work order to the server
@@ -65,6 +71,7 @@ def get_inv():  # noqa: E501
     """
     database_object.open_connection()
     sql_query = "SELECT * FROM Paterson_Inventory"
+
     input = ""
     try:
         data = database_object.fetch_data(sql_query,input)
@@ -124,6 +131,7 @@ def get_pn(part_number):  # noqa: E501
     """
     database_object.open_connection()
     sql_query = "SELECT * FROM Paterson_Inventory WHERE part_number=%s"
+    
     input = part_number
     logger.debug(input)
     try:
@@ -166,10 +174,19 @@ def update_pn(body):  # noqa: E501
     remarks = body.remarks
 
     database_object.open_connection()
-    sql_query = "UPDATE Paterson_Inventory SET quantity=%s, part_number=%s, location=%s, description=%s, status=%s, lead_time=%s, outside_process=%s, remarks=%s WHERE lot_number=%s"
-    input = (quantity,part_number,location,description,status,lead_time,outside_process,remarks,lot_number)
-    logger.debug(type(input))
-    logger.debug(input)
+
+    if quantity == 0:
+        logger.info("Deleting this lot")
+        sql_query = "DELETE FROM Paterson_Inventory WHERE lot_number = %s;"
+        input = lot_number
+    else:
+        sql_query = "UPDATE Paterson_Inventory SET quantity=%s, part_number=%s, location=%s, description=%s, status=%s, lead_time=%s, outside_process=%s, remarks=%s WHERE lot_number=%s"
+        input = (quantity,part_number,location,description,status,lead_time,outside_process,remarks,lot_number)
+    
+        # sql_query = "UPDATE Paterson_Inventory SET quantity=%s, part_number=%s, location=%s, description=%s, status=%s, lead_time=%s, outside_process=%s, remarks=%s WHERE lot_number=%s"
+        # input = (quantity,part_number,location,description,status,lead_time,outside_process,remarks,lot_number)
+        # logger.debug(type(input))
+        # logger.debug(input)
     try:
         database_object.update_data(sql_query,input)
     except:
@@ -177,22 +194,34 @@ def update_pn(body):  # noqa: E501
         database_object.close_connection()
         return "", 405
 
-    sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
-    input = lot_number
-    logger.debug(input)
-    try:
-        data = database_object.fetch_data(sql_query,input)
-        logger.info("Successful extraction")
-    except:
-        logger.error("Unable to fetch")
-        database_object.close_connection()
-        return "", 404
+    if quantity != 0:
+        sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
+        input = lot_number
+        logger.debug(input)
+        try:
+            data = database_object.fetch_data(sql_query,input)
+            logger.info("Successful extraction")
+        except:
+            logger.error("Unable to fetch")
+            database_object.close_connection()
+            return "", 404
 
-    if data[0]["quantity"]==quantity:
-        logger.info("Update successful")
-    else:
-        logger.error("Unsuccessful update")
+        if data[0]["quantity"]==quantity:
+            logger.info("Update successful")
+        else:
+            logger.error("Unsuccessful update")
+            database_object.close_connection()
+            return 500
         database_object.close_connection()
-        return 500
-    database_object.close_connection()
-    return 200
+        return 200
+    else:
+        sql_query = "SELECT * FROM Paterson_Inventory WHERE lot_number=%s"
+        input = lot_number
+        logger.debug(input)
+        try:
+            data = database_object.fetch_data(sql_query,input)
+            logger.info("Successful extraction")
+        except:
+            logger.info("Data deleted")
+            database_object.close_connection()
+            return "", 200

@@ -26,7 +26,7 @@ docker run -p 8081:8080 app-inventory
 
 ## Starting database
 ```
-docker run --name test-mysql -e MYSQL_ROOT_PASSWORD=adminpwd -p 3306:3306 -v /c/Users/ENGINEERING-FLN1/Documents/workspace/test-db:/var/lib/mysql mysql:5.7.30
+docker run --name test-mysql -e MYSQL_ROOT_PASSWORD=adminpwd -p 3306:3306 -v /c/Users/ENGINEERING-FLN1/Documents/Automation/Projects/software_ws/test-db:/var/lib/mysql mysql:5.7.30
 ```
 ## Regenerating server
 
