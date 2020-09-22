@@ -14,6 +14,9 @@ else:
     logger.info("You are in production mode")
     database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='WorkOrder', charset='utf8mb4')
 
+def get_my_key(obj):
+    return obj['location']
+
 def add_pn(body):  # noqa: E501
     """Add a new work order to the server
 
@@ -87,6 +90,7 @@ def get_inv():  # noqa: E501
     else:
         logger.debug(data)
     database_object.close_connection()
+    data.sort(key=get_my_key)
     return data, 200
 
 def get_ln(lot_number):  # noqa: E501
@@ -116,6 +120,7 @@ def get_ln(lot_number):  # noqa: E501
     else:
         logger.debug(data)
     database_object.close_connection()
+    data.sort(key=get_my_key)
     return data, 200
 
 
@@ -148,6 +153,7 @@ def get_pn(part_number):  # noqa: E501
     else:
         logger.debug(data)
     database_object.close_connection()
+    data.sort(key=get_my_key)
     return data, 200
 
 
