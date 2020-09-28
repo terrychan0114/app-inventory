@@ -30,6 +30,6 @@ setup.py
 git_push.sh
 .travis.yml
 Dockerfile
+server/__main__.py
 
-server/controllers/*.py
 # server/models/*.py

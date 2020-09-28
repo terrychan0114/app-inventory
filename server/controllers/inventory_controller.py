@@ -14,9 +14,6 @@ else:
     logger.info("You are in production mode")
     database_object = Database(host='10.10.4.61', user='root', password='adminpwd', db='WorkOrder', charset='utf8mb4')
 
-def get_my_key(obj):
-    return obj['location']
-
 def add_pn(body):  # noqa: E501
     """Add a new work order to the server
 
@@ -64,11 +61,13 @@ def add_pn(body):  # noqa: E501
     return "", 200
 
 
-def get_inv():  # noqa: E501
+def get_inv(sorting=None):  # noqa: E501
     """Get the information of all inventory
 
      # noqa: E501
 
+    :param sorting: This is the sorting
+    :type sorting: str
 
     :rtype: List[InventoryInfo]
     """
@@ -90,16 +89,20 @@ def get_inv():  # noqa: E501
     else:
         logger.debug(data)
     database_object.close_connection()
-    data.sort(key=get_my_key)
-    return data, 200
+    return_json = sorted(data,key=lambda i:i[sorting])
+    # logger.debug(df_json_sort)
+    return return_json, 200
 
-def get_ln(lot_number):  # noqa: E501
+
+def get_ln(lot_number, sorting=None):  # noqa: E501
     """Get the information of a lot number
 
      # noqa: E501
 
     :param lot_number: This is the input for getting lot number
     :type lot_number: str
+    :param sorting: This is the sorting
+    :type sorting: str
 
     :rtype: InventoryInfo
     """
@@ -120,17 +123,19 @@ def get_ln(lot_number):  # noqa: E501
     else:
         logger.debug(data)
     database_object.close_connection()
-    data.sort(key=get_my_key)
-    return data, 200
+    return_json = sorted(data,key=lambda i:i[sorting])
+    return return_json, 200
 
 
-def get_pn(part_number):  # noqa: E501
+def get_pn(part_number, sorting=None):  # noqa: E501
     """Get the information of a part number
 
      # noqa: E501
 
     :param part_number: This is the input
     :type part_number: str
+    :param sorting: This is the sorting
+    :type sorting: str
 
     :rtype: List[InventoryInfo]
     """
@@ -153,8 +158,8 @@ def get_pn(part_number):  # noqa: E501
     else:
         logger.debug(data)
     database_object.close_connection()
-    data.sort(key=get_my_key)
-    return data, 200
+    return_json = sorted(data,key=lambda i:i[sorting])
+    return return_json, 200
 
 
 def update_pn(body):  # noqa: E501
